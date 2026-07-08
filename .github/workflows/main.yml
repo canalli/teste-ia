@@ -1,0 +1,34 @@
+name: WAP DevSecOps Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  review-code:
+    # 🔴 CRÍTICO: Diz para o GitHub rodar na sua máquina local (WSL)
+    runs-on: self-hosted 
+
+    steps:
+      # 1. Baixa o código do repositório
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # 2. Isola apenas o que mudou no Pull Request e salva em pr.diff
+      - name: Get PR Diff
+        run: |
+          git diff origin/${{ github.base_ref }}...origin/${{ github.head_ref }} > pr.diff
+
+      # 3. Garante que o Python e as dependências estão prontas no seu WSL
+      - name: Set up Python Dependencies
+        run: |
+          pip3 install requests --quiet
+
+      # 4. Executa o script que conversa com o seu Ollama local
+      - name: Run IA Auditor
+        env:
+          INPUT_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: python3 auditar_pr.py
