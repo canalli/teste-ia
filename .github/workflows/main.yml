@@ -18,10 +18,19 @@ jobs:
         with:
           fetch-depth: 0
 
-      # 2. Isola apenas o que mudou no Pull Request e salva em pr.diff
+# 2. Isola apenas o que mudou (Funciona para Push e para Pull Request)
       - name: Get PR Diff
         run: |
-          git diff origin/${{ github.base_ref }}...origin/${{ github.head_ref }} > pr.diff
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "🤖 Detectado: Evento de Pull Request. Extraindo diferença entre branches..."
+            git diff origin/${{ github.base_ref }}...origin/${{ github.head_ref }} > pr.diff
+          else
+            echo "🚀 Detectado: Evento de Push direto. Extraindo alterações do último commit..."
+            git diff HEAD~1 HEAD > pr.diff
+          fi
+          
+          echo "📄 Conteúdo extraído para o arquivo pr.diff (Primeiras 10 linhas):"
+          head -n 10 pr.diff
 
       # 3. Garante que o Python e as dependências estão prontas no seu WSL
       - name: Set up Python Dependencies
