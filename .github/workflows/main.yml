@@ -33,4 +33,4 @@ jobs:
         env:
           INPUT_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
-        run: python3 auditar_pr.py
+        run: python3 /home/rafaelcanalli/actions_runner/_work/auditar_pr.py
