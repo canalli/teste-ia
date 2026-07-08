@@ -32,10 +32,10 @@ jobs:
           echo "📄 Conteúdo extraído para o arquivo pr.diff (Primeiras 10 linhas):"
           head -n 10 pr.diff
 
-      # 3. Garante que o Python e as dependências estão prontas no seu WSL
+# 3. Garante que as dependências do Python estão prontas ignorando a trava da PEP 668
       - name: Set up Python Dependencies
         run: |
-          pip3 install requests --quiet
+          pip3 install requests --break-system-packages --quiet
 
       # 4. Executa o script que conversa com o seu Ollama local
       - name: Run IA Auditor
