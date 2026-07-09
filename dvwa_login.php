@@ -13,6 +13,7 @@ if( isset( $_POST[ 'Login' ] ) ) {
 		$session_token = $_SESSION[ 'session_token' ];
 	} else {
 		$session_token = "";
+		
 	}
 
 	checkToken( $_REQUEST[ 'user_token' ], $session_token, 'login.php' );
