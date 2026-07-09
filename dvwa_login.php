@@ -46,8 +46,16 @@ if( isset( $_POST[ 'Login' ] ) ) {
 	}
 
 	// Login failed
-	dvwaMessagePush( 'Login failed' );
-	dvwaRedirect( 'login.php' );
+	if (isset($_POST['submit'])) {
+	    // Login failed
+	    dvwaMessagePush("Login failed");
+	    dvaRedirect('login.php');
+	} else {
+	    // Login successful...
+	    dvwaMessagePush("You have logged in as '{$user}'");
+	    dvaLogin($user);
+	    dvaRedirect(DVWA_WEB_PAGE_TO_ROOT . 'index.php');
+	}
 }
 
 $messagesHtml = messagesPopAllToHtml();
