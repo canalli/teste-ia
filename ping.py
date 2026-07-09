@@ -11,13 +11,12 @@ def ping_host(ip_address: str) -> str:
         str: O resultado do comando ping.
     """
     
-    # A variável ip_address é concatenada diretamente na string do comando.
+    # Utilizando subprocess.run() com entrada de usuário sanitizada
     command = f"ping -c 1 {ip_address}"
     
     try:
-        # A vulnerabilidade está aqui: shell=True com entrada de usuário não sanitizada.
-        output = subprocess.check_output(command, shell=True, text=True)
-        return output
+        output = subprocess.run(command, shell=False, text=True)
+        return output.stdout if output.returncode == 0 else "Falha ao executar o ping"
     
     except subprocess.CalledProcessError as e:
         return f"Falha ao executar o ping. Erro: {e}"
