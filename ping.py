@@ -12,14 +12,3 @@ def ping_host(ip_address: str) -> str:
      """
     
    # Sanitizando a entrada para prevenir SQL Injection
-    sanitized_ip = subprocess.quote(ip_address)
-   
-    command = f"ping -c 1 {sanitized_ip}"
-     
-     try:
-       output = subprocess.run(command, shell=False, text=True)
-       sanitized_command = subprocess.run(command, shell=False, text=True)
-       return sanitized_command.stdout if sanitized_command.returncode == 0 else "Falha ao executar o ping"
-     
-     except subprocess.CalledProcessError as e:
-         return f"Falha ao executar o ping. Erro: {e}"
